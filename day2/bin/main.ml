@@ -15,25 +15,51 @@ let reports = List.map (fun line -> String.split_on_char ' ' line |> List.map in
 
 let rec deltas = function
   | []
-  | _ :: [] -> []
+  | _ :: [] ->
+      []
   | r1 :: r2 :: tl -> (r2 - r1) :: deltas (r2 :: tl)
 
 let rec bounds = function
   | [] -> true
-  | d :: tl -> let d = Int.abs d in (d >= 1 && d <= 3) && bounds tl
+  | d :: tl ->
+      let d = Int.abs d in
+      (d >= 1 && d <= 3) && bounds tl
 
 let rec direction = function
   | []
-  | _ :: [] -> true
+  | _ :: [] ->
+      true
   | d1 :: d2 :: tl -> (if d1 > 0 then d2 > 0 else d2 < 0) && direction (d2 :: tl)
 
-let part1 = reports |> List.filter (fun rep ->
-    let () = List.iter (Printf.printf "%i,") rep in
-    let () = Printf.printf " -> " in
-    let ds = deltas rep in
-    let () = List.iter (Printf.printf "%i,") ds in
-    let r = direction ds && bounds ds in
-    let () = Printf.printf " -> %s\n" (if r then "true" else "false") in r
-  ) |> List.length
+let part1 =
+  reports
+  |> List.filter (fun rep ->
+         let ds = deltas rep in
+         direction ds && bounds ds)
+  |> List.length
 
 let () = Printf.printf "part 1: %i\n" part1
+
+let sublists lst =
+  let rec loop l1 = function
+    | [] -> []
+    | hd :: l2 -> (l1 @ l2) :: loop (l1 @ [ hd ]) l2
+  in
+  loop [] lst
+
+let part2 =
+  reports
+  |> List.filter (fun rep ->
+         let ds = deltas rep in
+         let r = direction ds && bounds ds in
+         if r then r
+         else
+           sublists rep
+           |> List.fold_left
+                (fun acc subrep ->
+                  let ds = deltas subrep in
+                  (direction ds && bounds ds) || acc)
+                false)
+  |> List.length
+
+let () = Printf.printf "part 2: %i\n" part2
