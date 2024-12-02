@@ -19,25 +19,15 @@ let rec deltas = function
       []
   | r1 :: r2 :: tl -> (r2 - r1) :: deltas (r2 :: tl)
 
-let rec bounds = function
-  | [] -> true
-  | d :: tl ->
-      let d = Int.abs d in
-      (d >= 1 && d <= 3) && bounds tl
+let pbound x = x >= 1 && x <= 3
+let nbound x = x >= -3 && x <= -1
 
 let rec direction = function
-  | []
-  | _ :: [] ->
-      true
-  | d1 :: d2 :: tl -> (if d1 > 0 then d2 > 0 else d2 < 0) && direction (d2 :: tl)
+  | [] -> true
+  | d2 :: [] -> pbound d2 || nbound d2
+  | d1 :: d2 :: tl -> (if d1 > 0 then pbound d1 && d2 > 0 else nbound d1 && d2 < 0) && direction (d2 :: tl)
 
-let part1 =
-  reports
-  |> List.filter (fun rep ->
-         let ds = deltas rep in
-         direction ds && bounds ds)
-  |> List.length
-
+let part1 = reports |> List.filter (fun rep -> deltas rep |> direction) |> List.length
 let () = Printf.printf "part 1: %i\n" part1
 
 let sublists lst =
@@ -50,16 +40,7 @@ let sublists lst =
 let part2 =
   reports
   |> List.filter (fun rep ->
-         let ds = deltas rep in
-         let r = direction ds && bounds ds in
-         if r then r
-         else
-           sublists rep
-           |> List.fold_left
-                (fun acc subrep ->
-                  let ds = deltas subrep in
-                  (direction ds && bounds ds) || acc)
-                false)
+         if deltas rep |> direction then true else sublists rep |> List.fold_left (fun acc subrep -> deltas subrep |> direction || acc) false)
   |> List.length
 
 let () = Printf.printf "part 2: %i\n" part2
