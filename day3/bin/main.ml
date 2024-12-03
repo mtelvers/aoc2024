@@ -8,28 +8,12 @@ module Int = struct
     | Failure _ -> None
 end
 
-let part1 =
-  let r = Str.regexp {|mul([0-9]+,[0-9]+)|} in
-  Str.full_split r input
-  |> List.fold_left
-       (fun acc s ->
-         match s with
-         | Str.Text _ -> acc
-         | Delim x ->
-             let r = Str.regexp {|[(,)]|} in
-             let mul = Str.split r x |> List.filter_map Int.of_string_opt |> List.fold_left (fun sum x -> sum * x) 1 in
-             acc + mul)
-       0
-
-let () = Printf.printf "part 1: %i\n" part1
-
 type t = {
   add : int;
   total : int;
 }
 
-let part2 =
-  let r = Str.regexp {|mul([0-9]+,[0-9]+)\|do()\|don't()|} in
+let solution r =
   Str.full_split r input
   |> List.fold_left
        (fun acc s ->
@@ -43,4 +27,7 @@ let part2 =
              { acc with total = acc.total + (acc.add * mul) })
        { add = 1; total = 0 }
 
-let () = Printf.printf "part 2: %i\n" part2.total
+let s = solution (Str.regexp {|mul([0-9]+,[0-9]+)|})
+let () = Printf.printf "part 1: %i\n" s.total
+let s = solution (Str.regexp {|mul([0-9]+,[0-9]+)\|do()\|don't()|})
+let () = Printf.printf "part 2: %i\n" s.total

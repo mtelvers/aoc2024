@@ -1,16 +1,4 @@
-let read_input =
-  let ic = open_in "input" in
-  let rec loop input lines =
-    try
-      let line = input_line input in
-      loop input (line :: lines)
-    with
-    | End_of_file ->
-        close_in input;
-        lines
-  in
-  loop ic []
-
+let read_input = In_channel.with_open_text "input" @@ fun ic -> In_channel.input_lines ic
 let reports = List.map (fun line -> String.split_on_char ' ' line |> List.map int_of_string) read_input
 
 let rec deltas = function
