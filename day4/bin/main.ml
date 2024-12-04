@@ -26,14 +26,29 @@ let rec search p d = function
   | ch :: tl -> (
       Puzzle.find_opt p puzzle |> function
       | None -> false
-      | Some x when x = ch ->
-          search { y = p.y + d.y; x = p.x + d.x } d tl
+      | Some x when x = ch -> search { y = p.y + d.y; x = p.x + d.x } d tl
       | Some _ -> false)
 
-let part1 =
+let part1 = Puzzle.fold (fun p _ sum -> sum + (directions |> List.filter (fun d -> search p d xmas) |> List.length)) puzzle 0
+let () = Printf.printf "part 1: %i\n" part1
+let corners = [ { y = -1; x = -1 }; { y = -1; x = 1 }; { y = 1; x = -1 }; { y = 1; x = 1 } ]
+
+let part2 =
   Puzzle.fold
-    (fun p _ sum ->
-      sum + (directions |> List.filter (fun d -> search p d xmas) |> List.length))
+    (fun p v sum ->
+      match v with
+      | 'A' -> (
+          corners |> List.filter_map (fun d -> Puzzle.find_opt { y = p.y + d.y; x = p.x + d.x } puzzle) |> function
+          | 'M' :: 'M' ::
+            'S' :: 'S' :: _ -> sum + 1
+          | 'M' :: 'S' ::
+            'M' :: 'S' :: _ -> sum + 1
+          | 'S' :: 'S' ::
+            'M' :: 'M' :: _ -> sum + 1
+          | 'S' :: 'M' ::
+            'S' :: 'M' :: _ -> sum + 1
+          | _ -> sum)
+      | _ -> sum)
     puzzle 0
 
-let () = Printf.printf "part 1: %i\n" part1
+let () = Printf.printf "part 2: %i\n" part2
