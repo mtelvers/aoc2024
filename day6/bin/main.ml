@@ -5,43 +5,42 @@ type coord = {
   x : int;
 }
 
-module CoordMap = Map.Make (struct
-  type t = coord
+module IntMap = Map.Make (Int)
 
-  let compare = compare
-end)
+let int_of_coord { y; x } = x + Int.shift_left y 16
+let coord_of_int n = { y = Int.shift_right n 16; x = Int.logand n 0xffff }
 
 let lab =
   input
-  |> List.mapi (fun y line -> List.init (String.length line) (String.get line) |> List.mapi (fun x ch -> ({ y; x }, ch)))
-  |> List.flatten |> CoordMap.of_list
+  |> List.mapi (fun y line -> List.init (String.length line) (String.get line) |> List.mapi (fun x ch -> (int_of_coord { y; x }, ch)))
+  |> List.flatten |> IntMap.of_list
 
-let start, _ = lab |> CoordMap.filter (fun _ ch -> ch = '^') |> CoordMap.choose
+let start = lab |> IntMap.filter (fun _ ch -> ch = '^') |> IntMap.choose |> fun (start, _) -> coord_of_int start
 
 let rec walk lab current dir path =
-  let path = CoordMap.add_to_list current dir path in
+  let path = IntMap.add_to_list (int_of_coord current) dir path in
   let new_pos = { y = current.y + dir.y; x = current.x + dir.x } in
-  match CoordMap.find_opt new_pos lab with
+  match IntMap.find_opt (int_of_coord new_pos) lab with
   | None -> (false, path)
   | Some '#' -> walk lab current { y = dir.x; x = -dir.y } path
   | Some '^'
   | Some '.' -> (
-      match CoordMap.find_opt new_pos path with
+      match IntMap.find_opt (int_of_coord new_pos) path with
       | Some lst when List.mem dir lst -> (true, path)
       | Some _
       | None ->
           walk lab new_pos dir path)
   | _ -> (false, path)
 
-let _, path = walk lab start { y = -1; x = 0 } CoordMap.empty
-let part1 = CoordMap.cardinal path
+let _, path = walk lab start { y = -1; x = 0 } IntMap.empty
+let part1 = IntMap.cardinal path
 let () = Printf.printf "part 1: %i\n" part1
 
 let part2 =
-  CoordMap.fold
+  IntMap.fold
     (fun pos _ sum ->
-      let new_lab = CoordMap.add pos '#' lab in
-      let loop, _ = walk new_lab start { y = -1; x = 0 } CoordMap.empty in
+      let new_lab = IntMap.add pos '#' lab in
+      let loop, _ = walk new_lab start { y = -1; x = 0 } IntMap.empty in
       sum + if loop then 1 else 0)
     path 0
 
