@@ -4,7 +4,10 @@ module Int = struct
   include Int
 
   let of_string_opt s =
-    try Some (int_of_string s) with
+    try
+      let i = int_of_string s in
+      if string_of_int i = s then Some i else assert false
+    with
     | Failure _ -> None
 end
 
@@ -22,7 +25,15 @@ let equations =
 
 let rec foo v sum = function
   | [] -> sum = v
-  | hd :: tl -> foo (hd + v) sum tl || foo (hd * v) sum tl
+  | hd :: tl -> foo (v + hd) sum tl || foo (v * hd) sum tl
 
 let part1 = equations |> List.fold_left (fun sum e -> sum + if foo 0 e.answer e.numbers then e.answer else 0) 0
 let () = Printf.printf "part 1: %i\n" part1
+let cat a b = int_of_string (string_of_int a ^ string_of_int b)
+
+let rec foo v sum = function
+  | [] -> sum = v
+  | hd :: tl -> foo (v + hd) sum tl || foo (v * hd) sum tl || foo (cat v hd) sum tl
+
+let part2 = equations |> List.fold_left (fun sum e -> sum + if foo 0 e.answer e.numbers then e.answer else 0) 0
+let () = Printf.printf "part 2: %i\n" part2
