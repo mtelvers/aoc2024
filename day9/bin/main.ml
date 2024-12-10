@@ -3,6 +3,18 @@ let diskmap = List.init (String.length input) (fun i -> int_of_string (String.ma
 let disksize = List.fold_left (fun sum x -> sum + x) 0 diskmap
 let disk = Array.make disksize None
 
+type f = {
+  id : int;
+  size : int;
+}
+
+let rec chunks id = function
+  | [] -> []
+  | size :: [] -> [ `File { id; size }; `Space 0 ]
+  | size :: space :: tl -> `File { id; size } :: `Space space :: chunks (id + 1) tl
+
+let chunklist = chunks 0 diskmap
+
 let rec fill start count v =
   let () = Array.set disk start v in
   if count > 1 then fill (start + 1) (count - 1) v else count + start
@@ -53,22 +65,6 @@ let part1 =
 
 let () = Printf.printf "part 1: %i\n" part1
 
-type f = {
-  id : int;
-  size : int;
-}
-
-type foo =
-  [ `File of f
-  | `Space of int
-  ]
-
-let rec chunks id = function
-  | [] -> []
-  | size :: [] -> [ `File { id; size }; `Space 0 ]
-  | size :: space :: tl -> `File { id; size } :: `Space space :: chunks (id + 1) tl
-
-let chunklist = chunks 0 diskmap
 let disk2 = chunklist |> Array.of_list
 
 let print () =
@@ -81,7 +77,7 @@ let () = print ()
 
 let len = Array.fold_left (fun sum v ->
     match v with
-  | `File {id;size} -> sum + size
+  | `File {id = _;size} -> sum + size
   | `Space size -> sum + size) 0
 
 let disk_length = len disk2

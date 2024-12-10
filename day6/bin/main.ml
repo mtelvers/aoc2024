@@ -5,43 +5,50 @@ type coord = {
   x : int;
 }
 
-module IntMap = Map.Make (Int)
-
 let int_of_coord { y; x } = x + Int.shift_left y 16
 let coord_of_int n = { y = Int.shift_right n 16; x = Int.logand n 0xffff }
 
+module IntMap = Map.Make (Int)
+
 let lab =
-  input
-  |> List.mapi (fun y line -> List.init (String.length line) (String.get line) |> List.mapi (fun x ch -> (int_of_coord { y; x }, ch)))
-  |> List.flatten |> IntMap.of_list
+  input |> List.mapi (fun y line -> List.init (String.length line) (String.get line) |> List.mapi (fun x ch -> (int_of_coord{ y; x }, ch))) |> List.flatten |> IntMap.of_list
 
 let start = lab |> IntMap.filter (fun _ ch -> ch = '^') |> IntMap.choose |> fun (start, _) -> coord_of_int start
 
-let rec walk lab current dir path =
-  let path = IntMap.add_to_list (int_of_coord current) dir path in
-  let new_pos = { y = current.y + dir.y; x = current.x + dir.x } in
+let rec walk pos dir lab =
+  let new_pos = { y = pos.y + dir.y; x = pos.x + dir.x } in
   match IntMap.find_opt (int_of_coord new_pos) lab with
-  | None -> (false, path)
-  | Some '#' -> walk lab current { y = dir.x; x = -dir.y } path
+  | None -> []
+  | Some '#' -> walk pos { y = dir.x; x = -dir.y } lab
   | Some '^'
-  | Some '.' -> (
-      match IntMap.find_opt (int_of_coord new_pos) path with
-      | Some lst when List.mem dir lst -> (true, path)
-      | Some _
-      | None ->
-          walk lab new_pos dir path)
-  | _ -> (false, path)
+  | Some '.' ->
+      new_pos :: walk new_pos dir lab
+  | _ -> []
 
-let _, path = walk lab start { y = -1; x = 0 } IntMap.empty
-let part1 = IntMap.cardinal path
+let rec count pos dir lab limit =
+  if limit = 0 then limit
+  else
+    let new_pos = { y = pos.y + dir.y; x = pos.x + dir.x } in
+    match IntMap.find_opt (int_of_coord new_pos) lab with
+    | None -> 0
+    | Some '#' -> count pos { y = dir.x; x = -dir.y } lab limit
+    | Some '^'
+    | Some '.' ->
+        1 + count new_pos dir lab (limit - 1)
+    | _ -> 0
+
+let path = walk start { y = -1; x = 0 } lab |> List.sort_uniq compare
+let part1 = path |> List.length
 let () = Printf.printf "part 1: %i\n" part1
 
+let max = part1 * 2
+
 let part2 =
-  IntMap.fold
-    (fun pos _ sum ->
-      let new_lab = IntMap.add pos '#' lab in
-      let loop, _ = walk new_lab start { y = -1; x = 0 } IntMap.empty in
-      sum + if loop then 1 else 0)
-    path 0
+  List.fold_left
+    (fun sum p ->
+      let new_lab = IntMap.add (int_of_coord p) '#' lab in
+      let len = count start { y = -1; x = 0 } new_lab max in
+      sum + if len = max then 1 else 0)
+    0 path
 
 let () = Printf.printf "part 2: %i\n" part2
