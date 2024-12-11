@@ -23,8 +23,9 @@ let rules x =
     else [ x * 2024 ]
 
 let rec loop lst = function
-  | 0 -> lst
-  | n -> loop (List.concat_map (fun stone -> rules stone) lst) (n - 1)
+  | 0 -> 1
+  | n -> List.fold_left (fun sum x ->
+      sum + loop (rules x) (n - 1)
+    ) 0 lst
 
-let part1 = List.fold_left (fun sum s -> sum + (List.length (loop [s] 25))) 0 stones
-let () = Printf.printf "part 1: %i\n" part1
+let () = Printf.printf "part 1: %i\n" (loop stones 26)
