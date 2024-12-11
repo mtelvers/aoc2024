@@ -9,7 +9,7 @@ let rec pow a = function
       b * b * if n mod 2 = 0 then 1 else a
 
 let rec length x =
-  match (x / 10) with
+  match x / 10 with
   | 0 -> 1
   | n -> 1 + length n
 
@@ -22,10 +22,20 @@ let rules x =
       [ x / power; x mod power ]
     else [ x * 2024 ]
 
-let rec loop lst = function
-  | 0 -> 1
-  | n -> List.fold_left (fun sum x ->
-      sum + loop (rules x) (n - 1)
-    ) 0 lst
+let cache = Hashtbl.create 1000000
 
-let () = Printf.printf "part 1: %i\n" (loop stones 26)
+let rec loop lst = function
+  | -1 -> 1
+  | n ->
+      List.fold_left
+        (fun sum x ->
+          match Hashtbl.find_opt cache (x, n) with
+          | None ->
+              let l = loop (rules x) (n - 1) in
+              let () = Hashtbl.add cache (x, n) l in
+              sum + l
+          | Some ans -> sum + ans)
+        0 lst
+
+let () = Printf.printf "part 1: %i\n" (loop stones 25)
+let () = Printf.printf "part 2: %i\n" (loop stones 75)
