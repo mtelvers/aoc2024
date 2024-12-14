@@ -26,7 +26,7 @@ let after n =
       let x = if x < 0 then x + mx else x in
       let y = (p.y + (v.y * n)) mod my in
       let y = if y < 0 then y + my else y in
-      { p = { x; y }; v })
+      { x; y })
     robots
 
 let after_100 = after 100
@@ -40,7 +40,7 @@ type quadrants = {
 
 let count_robots =
   List.fold_left
-    (fun { tl; tr; bl; br } { p = { x; y }; _ } ->
+    (fun { tl; tr; bl; br } { x; y } ->
       let mx2 = mx / 2 in
       let my2 = my / 2 in
       {
@@ -54,18 +54,38 @@ let count_robots =
 let part1 = count_robots.tl * count_robots.tr * count_robots.bl * count_robots.br
 let () = Printf.printf "part 1: %i\n" part1
 
+module CoordSet = Set.Make (struct
+  type t = coord
+
+  let compare = compare
+end)
+
+let rec fill pict { x; y } =
+  [ { y = 0; x = 1 }; { y = 1; x = 0 }; { y = 0; x = -1 }; { y = -1; x = 0 } ]
+  |> List.fold_left
+       (fun pict d ->
+         let p = { x = x + d.x; y = y + d.y } in
+         match CoordSet.find_opt p pict with
+         | Some _ -> fill pict p
+         | None -> pict)
+       (CoordSet.remove { x; y } pict)
+
+let rec loop n =
+  let picture = after n |> CoordSet.of_list in
+  let region = fill picture { x = mx / 2; y = my / 2 } in
+  let size = CoordSet.cardinal picture - CoordSet.cardinal region in
+  if size < 100 then loop (n + 1) else n
+
+let part2 = loop 1
+let () = Printf.printf "part 2: %i\n" part2
+
 let () =
-  for n = 0 to 1000 do
-    let seconds = 636 + (103 * n) in
-    let robots = after seconds in
-    let () = Printf.printf "XXX %i\n" seconds in
-    for y = 0 to my do
-      for x = 0 to mx do
-        match List.find_opt (fun { p; _ } -> p = { x; y }) robots with
-        | Some _ -> Printf.printf "*"
-        | None -> Printf.printf " "
-      done;
-      Printf.printf "\n"
+  let robots = after part2 in
+  for y = 0 to my do
+    for x = 0 to mx do
+      match List.find_opt (fun p -> p = { x; y }) robots with
+      | Some _ -> Printf.printf "*"
+      | None -> Printf.printf " "
     done;
-    flush stdout
+    Printf.printf "\n"
   done
