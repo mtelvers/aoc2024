@@ -53,3 +53,19 @@ let count_robots =
 
 let part1 = count_robots.tl * count_robots.tr * count_robots.bl * count_robots.br
 let () = Printf.printf "part 1: %i\n" part1
+
+let () =
+  for n = 0 to 1000 do
+    let seconds = 636 + (103 * n) in
+    let robots = after seconds in
+    let () = Printf.printf "XXX %i\n" seconds in
+    for y = 0 to my do
+      for x = 0 to mx do
+        match List.find_opt (fun { p; _ } -> p = { x; y }) robots with
+        | Some _ -> Printf.printf "*"
+        | None -> Printf.printf " "
+      done;
+      Printf.printf "\n"
+    done;
+    flush stdout
+  done
