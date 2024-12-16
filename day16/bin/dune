@@ -1,0 +1,3 @@
+(executable
+ (public_name day16)
+ (name main))
