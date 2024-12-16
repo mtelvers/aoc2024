@@ -1,8 +1,8 @@
 let input = In_channel.with_open_text "input" @@ fun ic -> In_channel.input_lines ic
 
 type coord = {
-  x : int;
   y : int;
+  x : int;
 }
 
 module CoordMap = Map.Make (struct
@@ -23,7 +23,7 @@ let maze = CoordMap.of_list maze_list
 let start = maze |> CoordMap.filter (fun _ ch -> ch = 'S') |> CoordMap.choose |> fun (start, _) -> start
 let finish = maze |> CoordMap.filter (fun _ ch -> ch = 'E') |> CoordMap.choose |> fun (finish, _) -> finish
 
-let rec loop r costs =
+let rec loop r costs seats =
   let () = Printf.printf "herd %i\n" (List.length r) in
   let () = flush stdout in
   let reindeers =
@@ -37,8 +37,8 @@ let rec loop r costs =
                | Some 'E'
                | Some '.' -> (
                    match CoordMap.find_opt pos costs with
-                   | None -> Some { pos; dir; cost; map = CoordMap.add pos '#' r.map }
-                   | Some v -> if v > cost then Some { pos; dir; cost; map = CoordMap.add pos '#' r.map } else None)
+                   | None -> Some { pos; dir; cost; map = CoordMap.add pos 'O' r.map }
+                   | Some v -> if v > cost then Some { pos; dir; cost; map = CoordMap.add pos 'O' r.map } else None)
                | _ -> None))
       r
   in
@@ -50,8 +50,16 @@ let rec loop r costs =
         | None -> CoordMap.add r.pos r.cost acc)
       costs reindeers
   in
-  let reindeers = List.filter (fun r -> r.pos != finish) reindeers in
-  if List.length reindeers > 0 then loop reindeers costs else costs
+  let finishers, reindeers = List.partition (fun r -> r.pos = finish) reindeers in
+  if List.length reindeers > 0 then loop reindeers costs (finishers @ seats) else (costs, finishers @ seats)
 
-let costs = loop [ { pos = start; dir = { y = 0; x = 1 }; cost = 0; map = maze } ] CoordMap.empty
-let () = Printf.printf "part 1: %i\n" (CoordMap.find finish costs)
+let costs, seats = loop [ { pos = start; dir = { y = 0; x = 1 }; cost = 0; map = maze } ] CoordMap.empty []
+let part1 = CoordMap.find finish costs
+let () = Printf.printf "part 1: %i\n" part1
+
+let seats =
+  List.filter (fun r -> r.cost = part1) seats
+  |> List.fold_left (fun acc r -> CoordMap.union (fun _ a b -> if a = 'O' then Some a else Some b) acc r.map) CoordMap.empty
+  |> CoordMap.filter (fun _ ch -> ch = 'O')
+
+let () = Printf.printf "part 2: %i\n" (1 + CoordMap.cardinal seats)
