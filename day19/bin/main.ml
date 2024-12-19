@@ -21,25 +21,22 @@ let part1 =
                 patterns
             in
             (*  let () = List.iter (Printf.printf "%s > %s\n" design) matches in *)
-            let possible = List.fold_left (fun acc design -> acc || design = "") false matches in
-            if possible then true
-            else
-              List.fold_left
-                (fun acc subdesign ->
-                  let p = loop subdesign in
-                  let () = Hashtbl.add cache subdesign p in
-                  acc || p)
-                false matches
+            let possible = List.fold_left (fun acc design -> if design = "" then acc + 1 else acc) 0 matches in
+            List.fold_left
+              (fun acc subdesign ->
+                let p = loop subdesign in
+                let () = Hashtbl.add cache subdesign p in
+                acc + p)
+              possible matches
         | Some p -> p
       in
-      let () = Printf.printf "%s is " design in
+      let () = Printf.printf "%s can be made in " design in
       let () = flush stdout in
       let possible = loop design in
-      let () = Printf.printf "%s\n" (if possible then "possible" else "not possible") in
+      let () = Printf.printf "%i ways\n" possible in
       let () = flush stdout in
-      if possible then sum + 1 else sum)
+      sum + possible)
     0 designs
 
 let () = Printf.printf "part 1: %i\n" part1
 let () = Printf.printf "cache size = %i\n" (Hashtbl.length cache)
-
