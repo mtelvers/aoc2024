@@ -1,4 +1,3 @@
 (executable
  (public_name day20)
- (name main)
- (libraries domainslib))
+ (name main))
