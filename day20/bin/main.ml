@@ -11,6 +11,8 @@ module CoordMap = Map.Make (struct
   let compare = compare
 end)
 
+module T = Domainslib.Task
+
 let track =
   input
   |> List.mapi (fun y line -> List.init (String.length line) (String.get line) |> List.mapi (fun x ch -> ({ y; x }, ch)))
@@ -59,15 +61,25 @@ let internal_walls =
       | _ -> false)
     track
 
-let all_cheats =
-  CoordMap.mapi
-    (fun pos _ ->
-      let cheat_track = CoordMap.add pos '.' track in
-      let best = loop 0 cheat_track CoordMap.(empty |> add start 0) in
-      let () = Printf.printf "(%i,%i) -> %i\n" pos.x pos.y best in
-      let () = flush stdout in
-      best)
-    internal_walls
+let pool = T.setup_pool ~num_domains:8 ()
 
-let part1 = CoordMap.fold (fun _ v acc -> if without_cheating - v >= 100 then acc + 1 else acc) all_cheats 0
+let part1 =
+  T.run pool (fun _ ->
+      let all_cheats =
+        CoordMap.mapi
+          (fun pos _ ->
+            let cheat_track = CoordMap.add pos '.' track in
+            let best = T.async pool (fun _ -> loop 0 cheat_track CoordMap.(empty |> add start 0)) in
+            best)
+          internal_walls
+      in
+      CoordMap.fold
+        (fun pos promise acc ->
+          let v = T.await pool promise in
+          let () = Printf.printf "(%i,%i) -> %i\n" pos.x pos.y v in
+          let () = flush stdout in
+          if without_cheating - v >= 100 then acc + 1 else acc)
+        all_cheats 0)
+
+let () = T.teardown_pool pool
 let () = Printf.printf "part 1: %i\n" part1
