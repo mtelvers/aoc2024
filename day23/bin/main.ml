@@ -49,3 +49,24 @@ let rec bfs d visited results =
 let set = StringMap.fold (fun computer _ set -> bfs 0 (StringMap.singleton computer ([ computer ], 0)) set) computers ListSet.empty
 let part1 = ListSet.filter (List.fold_left (fun acc c -> String.get c 0 = 't' || acc) false) set |> ListSet.cardinal
 let () = Printf.printf "part 1: %i\n" part1
+
+module StringSet = Set.Make (String)
+
+let cliques =
+  StringMap.mapi
+    (fun computer _ ->
+      let clique =
+        StringMap.fold
+          (fun comp _ set ->
+            let candidate_friends = StringMap.find comp computers in
+            if StringSet.fold (fun computer acc -> acc && List.mem computer candidate_friends) set true then StringSet.add comp set else set)
+          computers (StringSet.singleton computer)
+      in
+      clique)
+    computers
+
+let maximal =
+  StringMap.fold (fun _ clique maximal -> if StringSet.cardinal clique > StringSet.cardinal maximal then clique else maximal) cliques StringSet.empty
+
+let () = StringSet.iter (Printf.printf "%s,") maximal
+let () = Printf.printf "\n"
