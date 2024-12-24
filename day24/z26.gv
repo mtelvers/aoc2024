@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  bvp [shape=triangle]
+  x26 -> bvp
+  y26 -> bvp
+  gdb [shape=invtriangle]
+  rdj -> gdb
+  kfv -> gdb
+  kfv [shape=diamond]
+  y25 -> kfv
+  x25 -> kfv
+  rdj [shape=diamond]
+  rbd -> rdj
+  knm -> rdj
+  z26 [shape=triangle]
+  bvp -> z26
+  gdb -> z26
+}

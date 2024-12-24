@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  chc [shape=triangle]
+  x33 -> chc
+  y33 -> chc
+  mdv [shape=diamond]
+  kkd -> mdv
+  cjg -> mdv
+  rft [shape=diamond]
+  x32 -> rft
+  y32 -> rft
+  rnq [shape=invtriangle]
+  mdv -> rnq
+  rft -> rnq
+  z33 [shape=triangle]
+  chc -> z33
+  rnq -> z33
+}

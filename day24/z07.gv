@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cds [shape=triangle]
+  x07 -> cds
+  y07 -> cds
+  jmk [shape=diamond]
+  gtn -> jmk
+  qmt -> jmk
+  rkv [shape=invtriangle]
+  jmk -> rkv
+  ssv -> rkv
+  ssv [shape=diamond]
+  x06 -> ssv
+  y06 -> ssv
+  z07 [shape=triangle]
+  cds -> z07
+  rkv -> z07
+}

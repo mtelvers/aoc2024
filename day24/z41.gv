@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  bnv [shape=diamond]
+  sgt -> bnv
+  scc -> bnv
+  bst [shape=diamond]
+  x40 -> bst
+  y40 -> bst
+  qpp [shape=triangle]
+  y41 -> qpp
+  x41 -> qpp
+  stg [shape=invtriangle]
+  bnv -> stg
+  bst -> stg
+  z41 [shape=triangle]
+  qpp -> z41
+  stg -> z41
+}

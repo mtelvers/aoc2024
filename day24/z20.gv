@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cmf [shape=diamond]
+  rjf -> cmf
+  bqh -> cmf
+  tpf [shape=invtriangle]
+  wqs -> tpf
+  cmf -> tpf
+  vhb [shape=triangle]
+  x20 -> vhb
+  y20 -> vhb
+  wqs [shape=diamond]
+  x19 -> wqs
+  y19 -> wqs
+  z20 [shape=triangle]
+  tpf -> z20
+  vhb -> z20
+}

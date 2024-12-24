@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  dnf [shape=diamond]
+  stg -> dnf
+  qpp -> dnf
+  ksp [shape=invtriangle]
+  dnf -> ksp
+  pkj -> ksp
+  pkj [shape=diamond]
+  x41 -> pkj
+  y41 -> pkj
+  pvj [shape=triangle]
+  x42 -> pvj
+  y42 -> pvj
+  z42 [shape=triangle]
+  pvj -> z42
+  ksp -> z42
+}

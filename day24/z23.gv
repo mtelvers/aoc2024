@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  hbw [shape=invtriangle]
+  tws -> hbw
+  prp -> hbw
+  prp [shape=diamond]
+  x22 -> prp
+  y22 -> prp
+  tws [shape=diamond]
+  wgq -> tws
+  dqj -> tws
+  vfm [shape=triangle]
+  y23 -> vfm
+  x23 -> vfm
+  z23 [shape=triangle]
+  vfm -> z23
+  hbw -> z23
+}

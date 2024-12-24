@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  knm [shape=triangle]
+  x25 -> knm
+  y25 -> knm
+  rbd [shape=invtriangle]
+  thc -> rbd
+  sqt -> rbd
+  sqt [shape=diamond]
+  x24 -> sqt
+  y24 -> sqt
+  thc [shape=diamond]
+  pkr -> thc
+  kcv -> thc
+  z25 [shape=triangle]
+  rbd -> z25
+  knm -> z25
+}

@@ -1,0 +1,14 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  jjd [shape=triangle]
+  x01 -> jjd
+  y01 -> jjd
+  whb [shape=diamond]
+  y00 -> whb
+  x00 -> whb
+  z01 [shape=triangle]
+  jjd -> z01
+  whb -> z01
+}

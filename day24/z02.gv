@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  bdf [shape=diamond]
+  x01 -> bdf
+  y01 -> bdf
+  qkf [shape=invtriangle]
+  bdf -> qkf
+  wbw -> qkf
+  wbw [shape=diamond]
+  jjd -> wbw
+  whb -> wbw
+  wsv [shape=triangle]
+  x02 -> wsv
+  y02 -> wsv
+  z02 [shape=triangle]
+  qkf -> z02
+  wsv -> z02
+}

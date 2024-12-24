@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  bwg [shape=invtriangle]
+  mqn -> bwg
+  jpj -> bwg
+  jpj [shape=diamond]
+  ksn -> jpj
+  nft -> jpj
+  mfn [shape=triangle]
+  y13 -> mfn
+  x13 -> mfn
+  mqn [shape=diamond]
+  y12 -> mqn
+  x12 -> mqn
+  z13 [shape=triangle]
+  bwg -> z13
+  mfn -> z13
+}

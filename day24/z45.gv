@@ -1,0 +1,14 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cbv [shape=diamond]
+  rrq -> cbv
+  bmp -> cbv
+  gqr [shape=diamond]
+  y44 -> gqr
+  x44 -> gqr
+  z45 [shape=invtriangle]
+  gqr -> z45
+  cbv -> z45
+}

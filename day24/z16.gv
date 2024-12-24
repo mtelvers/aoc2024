@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  fpr [shape=diamond]
+  x15 -> fpr
+  y15 -> fpr
+  hgh [shape=invtriangle]
+  hqd -> hgh
+  fpr -> hgh
+  hqd [shape=diamond]
+  ppb -> hqd
+  hmr -> hqd
+  svs [shape=triangle]
+  y16 -> svs
+  x16 -> svs
+  z16 [shape=triangle]
+  svs -> z16
+  hgh -> z16
+}

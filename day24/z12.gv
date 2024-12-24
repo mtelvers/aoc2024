@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  dsm [shape=diamond]
+  htq -> dsm
+  rtk -> dsm
+  ksn [shape=invtriangle]
+  smr -> ksn
+  dsm -> ksn
+  nft [shape=triangle]
+  x12 -> nft
+  y12 -> nft
+  smr [shape=diamond]
+  y11 -> smr
+  x11 -> smr
+  z12 [shape=triangle]
+  ksn -> z12
+  nft -> z12
+}

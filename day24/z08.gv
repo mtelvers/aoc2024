@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  hmv [shape=triangle]
+  x08 -> hmv
+  y08 -> hmv
+  nph [shape=diamond]
+  cds -> nph
+  rkv -> nph
+  rts [shape=invtriangle]
+  sdj -> rts
+  nph -> rts
+  sdj [shape=diamond]
+  x07 -> sdj
+  y07 -> sdj
+  z08 [shape=triangle]
+  hmv -> z08
+  rts -> z08
+}

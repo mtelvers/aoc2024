@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  kcv [shape=triangle]
+  x24 -> kcv
+  y24 -> kcv
+  kwg [shape=diamond]
+  hbw -> kwg
+  vfm -> kwg
+  pkr [shape=invtriangle]
+  vjr -> pkr
+  kwg -> pkr
+  vjr [shape=diamond]
+  x23 -> vjr
+  y23 -> vjr
+  z24 [shape=triangle]
+  kcv -> z24
+  pkr -> z24
+}

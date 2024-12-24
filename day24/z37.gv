@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cvr [shape=triangle]
+  y37 -> cvr
+  x37 -> cvr
+  hck [shape=invtriangle]
+  trr -> hck
+  kfn -> hck
+  kfn [shape=diamond]
+  y36 -> kfn
+  x36 -> kfn
+  trr [shape=diamond]
+  jfq -> trr
+  fbb -> trr
+  z37 [shape=triangle]
+  hck -> z37
+  cvr -> z37
+}

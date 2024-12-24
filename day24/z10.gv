@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  chg [shape=diamond]
+  mtg -> chg
+  sqm -> chg
+  nvw [shape=diamond]
+  x09 -> nvw
+  y09 -> nvw
+  vgp [shape=invtriangle]
+  nvw -> vgp
+  chg -> vgp
+  vpc [shape=triangle]
+  y10 -> vpc
+  x10 -> vpc
+  z10 [shape=triangle]
+  vpc -> z10
+  vgp -> z10
+}

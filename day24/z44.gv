@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  bmp [shape=invtriangle]
+  whj -> bmp
+  pnn -> bmp
+  pnn [shape=diamond]
+  x43 -> pnn
+  y43 -> pnn
+  rrq [shape=triangle]
+  y44 -> rrq
+  x44 -> rrq
+  whj [shape=diamond]
+  sch -> whj
+  srj -> whj
+  z44 [shape=triangle]
+  rrq -> z44
+  bmp -> z44
+}

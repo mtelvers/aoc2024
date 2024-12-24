@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cbs [shape=triangle]
+  x35 -> cbs
+  y35 -> cbs
+  cwh [shape=diamond]
+  fqf -> cwh
+  chv -> cwh
+  ttb [shape=invtriangle]
+  cwh -> ttb
+  vvw -> ttb
+  vvw [shape=diamond]
+  y34 -> vvw
+  x34 -> vvw
+  z35 [shape=triangle]
+  cbs -> z35
+  ttb -> z35
+}

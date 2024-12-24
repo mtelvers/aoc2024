@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  jrr [shape=diamond]
+  x08 -> jrr
+  y08 -> jrr
+  mtg [shape=triangle]
+  y09 -> mtg
+  x09 -> mtg
+  ptf [shape=diamond]
+  rts -> ptf
+  hmv -> ptf
+  sqm [shape=invtriangle]
+  ptf -> sqm
+  jrr -> sqm
+  z09 [shape=triangle]
+  mtg -> z09
+  sqm -> z09
+}

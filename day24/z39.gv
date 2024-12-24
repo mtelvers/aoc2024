@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  cmt [shape=invtriangle]
+  wdw -> cmt
+  vqt -> cmt
+  nbq [shape=triangle]
+  x39 -> nbq
+  y39 -> nbq
+  vqt [shape=diamond]
+  x38 -> vqt
+  y38 -> vqt
+  wdw [shape=diamond]
+  mwv -> wdw
+  jsg -> wdw
+  z39 [shape=triangle]
+  nbq -> z39
+  cmt -> z39
+}

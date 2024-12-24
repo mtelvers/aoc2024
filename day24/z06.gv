@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  gtb [shape=diamond]
+  y05 -> gtb
+  x05 -> gtb
+  gtn [shape=invtriangle]
+  gtb -> gtn
+  hvv -> gtn
+  hvv [shape=diamond]
+  dqp -> hvv
+  nbm -> hvv
+  qmt [shape=triangle]
+  x06 -> qmt
+  y06 -> qmt
+  z06 [shape=triangle]
+  gtn -> z06
+  qmt -> z06
+}

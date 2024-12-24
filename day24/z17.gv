@@ -1,0 +1,20 @@
+digraph g1 {
+  layout="fdp";
+  overlap="false";
+  splines="true";
+  ffj [shape=triangle]
+  x17 -> ffj
+  y17 -> ffj
+  mts [shape=diamond]
+  x16 -> mts
+  y16 -> mts
+  rff [shape=diamond]
+  svs -> rff
+  hgh -> rff
+  rpg [shape=invtriangle]
+  rff -> rpg
+  mts -> rpg
+  z17 [shape=triangle]
+  ffj -> z17
+  rpg -> z17
+}
