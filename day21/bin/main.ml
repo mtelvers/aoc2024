@@ -24,9 +24,13 @@ let min_list = function
   | [] -> None
   | x :: xs -> Some (List.fold_left min x xs)
 
+let cache = Hashtbl.create 1000000
+
 let rec loop sequence = function
   | [] -> List.length sequence
   | keypad :: tl ->
+    match Hashtbl.find_opt cache (sequence, tl) with
+    | None ->
       let robot = CharMap.find 'A' keypad in
       let avoid = CharMap.find ' ' keypad in
       List.fold_left
@@ -36,7 +40,10 @@ let rec loop sequence = function
           let l = min_list (List.map (fun opt -> len + loop opt tl) options) in
           (next, Option.value ~default:9999 l))
         (robot, 0) sequence
-      |> fun (_, res) -> res
+      |> fun (_, res) ->
+      let () = Hashtbl.add cache (sequence, tl) res
+      in res
+    | Some c -> c
 
 let complexity =
   List.fold_left
@@ -50,3 +57,16 @@ let complexity =
     0 input
 
 let () = Printf.printf "part 1: %i\n" complexity
+
+let complexity2 =
+  List.fold_left
+    (fun acc code ->
+      let code_as_int = Scanf.sscanf code " %iA " @@ fun i -> i in
+      let code = List.init (String.length code) (String.get code) in
+      let sequence = loop code [ keypad; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2; keypad2 ] in
+      let complexity = code_as_int * sequence in
+      let () = Printf.printf "%i * %i = %i\n" sequence code_as_int (sequence * code_as_int) in
+      complexity + acc)
+    0 input
+
+let () = Printf.printf "part 2: %i\n" complexity2
